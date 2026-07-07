@@ -29,6 +29,13 @@ This workflow automatically processes incoming job applications, validates data,
 
 ---
 
+Before running this workflow, replace:
+- YOUR_GOOGLE_SHEET_ID_HERE — your own spreadsheet ID
+- YOUR_SLACK_CHANNEL_ID — your own Slack channel ID
+- Reconnect Google Sheets and Slack credentials in n8n
+  
+---
+
 ## Workflow Overview
 
 ```
