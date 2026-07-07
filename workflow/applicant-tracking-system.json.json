@@ -1,0 +1,552 @@
+{
+  "name": "Applicant Tracking System Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0",
+          "mode": "list",
+          "cachedResultName": "Job_Applications_Raw",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1641103231,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit#gid=1641103231"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        16,
+        0
+      ],
+      "id": "1f86fbce-2cfc-4282-b267-9a059592fa4a",
+      "name": "New Job Application",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "oBOAmXZsBfFcxdb2",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c0764b0c-7aa9-4c75-8e71-0c30afff3a4c",
+              "leftValue": "={{ $json.Company }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "80a4e943-2109-4b23-8b07-2103c1ba00e3",
+              "leftValue": "={{ $json.Role }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "a0c285fa-138b-4620-aa37-f00a9552a2af",
+      "name": "Validate Required Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "function sanitize(value) {\n  if (typeof value === 'string' && /^[=+\\-@]/.test(value)) {\n    return \"'\" + value;\n  }\n  return value;\n}\n\nconst row = $input.item.json;\n\n\nconst company = sanitize((row.Company || '').trim());\nconst role = sanitize((row.Role || '').trim());\nconst jobLink = sanitize((row['Job Link'] || '').trim());\nconst status = sanitize(row.Status || 'Applied');\n\nconst today = new Date();\nconst followUpDate = new Date(today);\nfollowUpDate.setDate(today.getDate() + 7);\nconst followUpFormatted = followUpDate.toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    company: company,\n    role: role,\n    jobLink: jobLink,\n    dateApplied: row['Date Applied'],\n    status: status,\n    followUpBy: followUpFormatted\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        -96
+      ],
+      "id": "07d26fd5-d919-457a-89d0-1ce1f59d37d5",
+      "name": "Format Application Data"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0",
+          "mode": "list",
+          "cachedResultName": "Job_Applications_Raw",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Master_Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "company",
+              "lookupValue": "={{ $json.company }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "83a79a9c-d05b-40eb-a90c-4e1145c6711f",
+      "name": "Find Existing Application",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1hd1DmSRSrYUCA0h",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const existingRows = $input.all();\n\nconst submission = $('Format Application Data').item.json;\n\nconst isDuplicate = existingRows.some(row => \n  row.json.company === submission.company && \n  row.json.role === submission.role\n);\n\nreturn [{\n  json: {\n    ...submission,\n    isDuplicate: isDuplicate\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        -96
+      ],
+      "id": "d2082c9c-e8c7-4361-9468-5e734339e5d4",
+      "name": "Check for Duplicate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "028a3d41-8bc0-43de-a121-2f43246b044a",
+              "leftValue": "={{ $json.isDuplicate }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1040,
+        -96
+      ],
+      "id": "b0fdeb88-5976-4e5e-b9f9-4df5e8117ed8",
+      "name": "Is New Application?"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0",
+          "mode": "list",
+          "cachedResultName": "Job_Applications_Raw",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Master_Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "company": "={{ $json.company }}",
+            "role": "={{ $json.role }}",
+            "jobLink": "={{ $json.jobLink }}",
+            "dateApplied": "={{ $json.dateApplied }}",
+            "status": "={{ $json.status }}",
+            "followUpBy": "={{ $json.followUpBy }}"
+          },
+          "matchingColumns": [
+            "company"
+          ],
+          "schema": [
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "jobLink",
+              "displayName": "jobLink",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dateApplied",
+              "displayName": "dateApplied",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "followUpBy",
+              "displayName": "followUpBy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1280,
+        -176
+      ],
+      "id": "3852fd78-b3bf-48ee-acec-e88a18ba03e9",
+      "name": "Save to Master Tracker",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1hd1DmSRSrYUCA0h",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BFHSZEAR3",
+          "mode": "list",
+          "cachedResultName": "job-applications"
+        },
+        "text": "=New application logged: {{ $json.company }} — {{ $json.role }} Follow up by: {{ $json.followUpBy }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        1472,
+        -176
+      ],
+      "id": "588b2332-ddec-40e7-89ea-93a1196bc18f",
+      "name": "Notify Slack - New Application",
+      "webhookId": "5edcaf2a-c54e-425f-87b6-b473c82e55fb",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "ScemMbVy8hjVxUYH",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0",
+          "mode": "list",
+          "cachedResultName": "Job_Applications_Raw",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 917546063,
+          "mode": "list",
+          "cachedResultName": "Run_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit#gid=917546063"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $now }}",
+            "company": "={{ $json.company }}",
+            "status": "success"
+          },
+          "matchingColumns": [
+            "timestamp"
+          ],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1648,
+        -176
+      ],
+      "id": "d0d047bc-eb66-4eca-9611-fe733dff395f",
+      "name": "Log Successful Run",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1hd1DmSRSrYUCA0h",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BFHSZEAR3",
+          "mode": "list",
+          "cachedResultName": "job-applications"
+        },
+        "text": "=⚠️ Duplicate skipped: {{ $json.company }} — {{ $json.role }} already exists in Master_Tracker",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        1280,
+        16
+      ],
+      "id": "9cfc6642-fd62-44d1-9f7e-a621cf0f3245",
+      "name": "Notify Slack - Duplicate Detected",
+      "webhookId": "39f3fea7-437e-4573-b1d8-c2e53ef97423",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "ScemMbVy8hjVxUYH",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "New Job Application": {
+      "main": [
+        [
+          {
+            "node": "Validate Required Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Required Fields": {
+      "main": [
+        [
+          {
+            "node": "Format Application Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Application Data": {
+      "main": [
+        [
+          {
+            "node": "Find Existing Application",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Existing Application": {
+      "main": [
+        [
+          {
+            "node": "Check for Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Duplicate": {
+      "main": [
+        [
+          {
+            "node": "Is New Application?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is New Application?": {
+      "main": [
+        [
+          {
+            "node": "Save to Master Tracker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify Slack - Duplicate Detected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Master Tracker": {
+      "main": [
+        [
+          {
+            "node": "Notify Slack - New Application",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Slack - New Application": {
+      "main": [
+        [
+          {
+            "node": "Log Successful Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "C2DH1OYopTMPP1F6",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "5428b5a5-ae59-4628-b5eb-0115aed22275",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8586f12b9607e67c480925a5e63fcd31227ebc2c200527b3458a188d5275d32"
+  },
+  "nodeGroups": [],
+  "id": "CqBZgcHzN0q5Dh54",
+  "tags": []
+}

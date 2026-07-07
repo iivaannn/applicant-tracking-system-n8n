@@ -1,0 +1,73 @@
+{
+  "name": "Job Tracker - Error Handler",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "bdb7f91a-392b-4d39-9ac9-74d20aa5843c",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BFHSZEAR3",
+          "mode": "list",
+          "cachedResultName": "job-applications"
+        },
+        "text": "=⚠️ Job Tracker workflow failed Node: {{ $json.execution.error.node.name }} Error: {{ $json.execution.error.message }} Time: {{ $now }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        208,
+        0
+      ],
+      "id": "312f8b55-ad01-40a2-b2f5-5b4b92120f32",
+      "name": "Send a message",
+      "webhookId": "70ca53ed-2410-4a1c-ac63-81fe1a6a5be8",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "ScemMbVy8hjVxUYH",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "05d4a442-24be-4d5a-b1f0-6481d7b3dced",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8586f12b9607e67c480925a5e63fcd31227ebc2c200527b3458a188d5275d32"
+  },
+  "nodeGroups": [],
+  "id": "C2DH1OYopTMPP1F6",
+  "tags": []
+}
