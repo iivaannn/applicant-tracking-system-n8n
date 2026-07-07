@@ -18,7 +18,7 @@
         "select": "channel",
         "channelId": {
           "__rl": true,
-          "value": "C0BFHSZEAR3",
+          "value": "YOUR_SLACK_CHANNEL_ID",
           "mode": "list",
           "cachedResultName": "job-applications"
         },
@@ -33,10 +33,10 @@
       ],
       "id": "312f8b55-ad01-40a2-b2f5-5b4b92120f32",
       "name": "Send a message",
-      "webhookId": "70ca53ed-2410-4a1c-ac63-81fe1a6a5be8",
+      "webhookId": "YOUR_WEBHOOK_ID_3",
       "credentials": {
         "slackOAuth2Api": {
-          "id": "ScemMbVy8hjVxUYH",
+          "id": "YOUR_SLACK_CRED_ID",
           "name": "Slack account"
         }
       }
@@ -65,7 +65,7 @@
   "versionId": "05d4a442-24be-4d5a-b1f0-6481d7b3dced",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "e8586f12b9607e67c480925a5e63fcd31227ebc2c200527b3458a188d5275d32"
+    "instanceId": "YOUR_N8N_INSTANCE_ID"
   },
   "nodeGroups": [],
   "id": "C2DH1OYopTMPP1F6",
