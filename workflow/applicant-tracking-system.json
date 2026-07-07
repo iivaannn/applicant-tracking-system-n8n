@@ -12,17 +12,17 @@
         },
         "documentId": {
           "__rl": true,
-          "value": "1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0",
+          "value": "YOUR_GOOGLE_SHEET_ID_HERE",
           "mode": "list",
           "cachedResultName": "Job_Applications_Raw",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": 1641103231,
           "mode": "list",
           "cachedResultName": "Form Responses 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit#gid=1641103231"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit#gid=1641103231"
         },
         "event": "rowAdded",
         "options": {}
@@ -37,7 +37,7 @@
       "name": "New Job Application",
       "credentials": {
         "googleSheetsTriggerOAuth2Api": {
-          "id": "oBOAmXZsBfFcxdb2",
+          "id": "YOUR_GOOGLE_SHEETS_TRIGGER_CRED_ID",
           "name": "Google Sheets Trigger account"
         }
       }
@@ -105,17 +105,17 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0",
+          "value": "YOUR_GOOGLE_SHEET_ID_HERE",
           "mode": "list",
           "cachedResultName": "Job_Applications_Raw",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Master_Tracker",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit#gid=0"
         },
         "filtersUI": {
           "values": [
@@ -138,7 +138,7 @@
       "alwaysOutputData": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "1hd1DmSRSrYUCA0h",
+          "id": "YOUR_GOOGLE_SHEETS_CRED_ID",
           "name": "Google Sheets account"
         }
       }
@@ -195,17 +195,17 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0",
+          "value": "YOUR_GOOGLE_SHEET_ID_HERE",
           "mode": "list",
           "cachedResultName": "Job_Applications_Raw",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Master_Tracker",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -292,7 +292,7 @@
       "name": "Save to Master Tracker",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "1hd1DmSRSrYUCA0h",
+          "id": "YOUR_GOOGLE_SHEETS_CRED_ID",
           "name": "Google Sheets account"
         }
       }
@@ -303,7 +303,7 @@
         "select": "channel",
         "channelId": {
           "__rl": true,
-          "value": "C0BFHSZEAR3",
+          "value": "YOUR_SLACK_CHANNEL_ID",
           "mode": "list",
           "cachedResultName": "job-applications"
         },
@@ -318,10 +318,10 @@
       ],
       "id": "588b2332-ddec-40e7-89ea-93a1196bc18f",
       "name": "Notify Slack - New Application",
-      "webhookId": "5edcaf2a-c54e-425f-87b6-b473c82e55fb",
+      "webhookId": "YOUR_WEBHOOK_ID_1",
       "credentials": {
         "slackOAuth2Api": {
-          "id": "ScemMbVy8hjVxUYH",
+          "id": "YOUR_SLACK_CRED_ID",
           "name": "Slack account"
         }
       }
@@ -331,17 +331,17 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0",
+          "value": "YOUR_GOOGLE_SHEET_ID_HERE",
           "mode": "list",
           "cachedResultName": "Job_Applications_Raw",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": 917546063,
           "mode": "list",
           "cachedResultName": "Run_Log",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JUheqN34IYpDFEozfc52wnUhyQKWH_-oruuWiTJUbD0/edit#gid=917546063"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit#gid=917546063"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -399,7 +399,7 @@
       "name": "Log Successful Run",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "1hd1DmSRSrYUCA0h",
+          "id": "YOUR_GOOGLE_SHEETS_CRED_ID",
           "name": "Google Sheets account"
         }
       }
@@ -410,7 +410,7 @@
         "select": "channel",
         "channelId": {
           "__rl": true,
-          "value": "C0BFHSZEAR3",
+          "value": "YOUR_SLACK_CHANNEL_ID",
           "mode": "list",
           "cachedResultName": "job-applications"
         },
@@ -425,10 +425,10 @@
       ],
       "id": "9cfc6642-fd62-44d1-9f7e-a621cf0f3245",
       "name": "Notify Slack - Duplicate Detected",
-      "webhookId": "39f3fea7-437e-4573-b1d8-c2e53ef97423",
+      "webhookId": "YOUR_WEBHOOK_ID_2",
       "credentials": {
         "slackOAuth2Api": {
-          "id": "ScemMbVy8hjVxUYH",
+          "id": "YOUR_SLACK_CRED_ID",
           "name": "Slack account"
         }
       }
@@ -544,7 +544,7 @@
   "versionId": "5428b5a5-ae59-4628-b5eb-0115aed22275",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "e8586f12b9607e67c480925a5e63fcd31227ebc2c200527b3458a188d5275d32"
+    "instanceId": "YOUR_N8N_INSTANCE_ID"
   },
   "nodeGroups": [],
   "id": "CqBZgcHzN0q5Dh54",
